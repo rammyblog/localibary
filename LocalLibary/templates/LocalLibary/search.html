@@ -1,0 +1,83 @@
+{% extends 'LocalLibary/base.html'%}
+{% load static %}
+{% block title%}Search Results - Bookie{% endblock %}
+{% block contents %}
+    <!--============================= MAIN TITLE =============================-->
+
+ 
+    <!--//END POPULAR -->
+    <!--============================= FEATURED LISTING =============================-->
+    <section class="main-block featured-wrap">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="titile-block">
+                        <h2>Results of your Search</h2>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                {%if search %}
+                {% for book in search %}  
+                <div class="col-md-4 card-1">
+                    <div class="card">
+                              
+                        <img class="card-img-top" src="images/featured-img2.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <ul class="card-rating">
+                            
+                                <li>Free</li>
+                                <li><i class="fa fa-circle" aria-hidden="true"></i></li>
+                                <li> {% for genre in book.genre.all%} {{genre}}{% if not forloop.last%},{%endif%}{%endfor%}</li>
+                            </ul>
+                            <p class="card-text">{{book.summary}}</p>
+                        </div>
+                        <div class="card-bottom">
+                            <p><i class="fa fa-male" aria-hidden="true"></i>{{book.author}}</p>
+                            {%for copy in book.bookinstance_set.all%}<span class="open-close_green">{%if forloop.last%}Copies:{{foloop.counter}}{%endif%}</span>{% endfor %}
+                          
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+{%endif%}
+        {% if author %}
+   {% for author in author %}  
+                <div class="col-md-4 card-1">
+                    <div class="card">
+                              
+                        <img class="card-img-top" src="{%static 'LocalLibary/images/profilepics.png'%}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{{author.get_absolute_url}}">{{ author.first_name }} {{ author.last_name }}</a></h5>
+                                                <p><strong>Date Of Birth:</strong> {{author.date_of_birth}} {%if author.date_of_death != None%} {{author.date_of_death}} {% endif %}</p>
+                    <p class="text-muted"><strong>Books Published:</strong> {{author.book_set.all.count}}</p>
+                            <ul class="card-rating">
+                            
+                            </ul>
+                            <p class="card-text">About: {{author.about}}</p>
+                        </div>
+                        <div class="card-bottom">
+                            <p><i class="fa fa-male" aria-hidden="true"></i>{{book.author}}</p>
+                            {%for copy in book.bookinstance_set.all%}<span class="open-close_green">{%if forloop.last%}Copies:{{foloop.counter}}{%endif%}</span>{% endfor %}
+                          
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+            </div>
+        {%endif %}
+
+        </div>
+   
+            </section>
+    <!--//END FEATURED LISTING -->
+    <!--============================= DETAILED ITEM  =============================-->
+   
+    {% endblock %}
+    <!--//END ADD LISTING -->
+    <!--============================= FOOTER =============================-->
+    

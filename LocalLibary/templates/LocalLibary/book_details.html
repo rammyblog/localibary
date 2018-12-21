@@ -1,0 +1,198 @@
+
+{% extends 'LocalLibary/base.html'%}
+{% load static %}
+    <!--//END HEADER -->
+    {% block title%}{{book.title}} - Bookie{% endblock %}
+    <!--============================= BOOKING =============================-->
+    {% block contents %}
+  
+            <!-- Add Pagination -->
+      
+    <!--//END BOOKING -->
+    <!--============================= RESERVE A SEAT =============================-->
+    <section class="reserve-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>{{book.title}}</h5>
+                    <p><span>Free</span>$$</p>
+                    <p class="reserve-description"></p>
+                </div>
+                <div class="col-md-6">
+                    <div class="reserve-seat-block">
+                        <div class="reserve-rating mx-0 mx-md-3">
+                            {% if perms.LocalLibary.can_mark_returned %}
+                            <span><a href="{% url 'book_update' book.id%}" class="text-warning">Edit Book Details</a></span>
+                            {% endif %}
+                        </div>
+                        <div class="reserve-btn">
+                            <div class="featured-btn-wrap">
+                                <a href="#" class="btn btn-danger">RESERVE A BOOK</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--//END RESERVE A SEAT -->
+    <!--============================= BOOKING DETAILS =============================-->
+    <section class="gray-dark booking-details_wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 responsive-wrap">
+                    <div class="booking-checkbox_wrap">
+                        <div class="booking-checkbox">
+                            <img class="card-img-top" src="{{book.book_image.url}}" width="300" height="300" alt="{{book.title}}">
+                            <p>{{book.summary}}</p>
+                            <hr>
+                        </div>
+                        <div class="row">
+                            {% for copy in book.bookinstance_set.all %}
+                            <div class="col-md-4">
+                                <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">{{ copy.get_status_display }}</p>
+                               {% if copy.staus != 'a' %}
+                               <strong>Due Back</strong> {{copy.due_back}}{%endif%}
+<p><strong>Imprint:</strong> {{copy.imprint}}</p>
+      <p class="text-muted"><strong>Id:</strong> {{copy.id}}</p>
+
+                                    
+                                <label class="custom-checkbox">
+                        {% for genre in book.genre.all%} <span class="ti-check-box"></span>
+                        <span class="custom-control-description">{{genre}} {% if not forloop.last%},{%endif%} </span>{% endfor %} 
+                      </label>
+                                
+                            </div>{% endfor %} 
+                                        </div>
+
+                    </div>                
+
+                    <div class="booking-checkbox_wrap booking-your-review">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                        <h5>Write a Review</h5>
+                        <hr>
+                        <div class="customer-review_wrap">
+                            <div class="customer-content-wrap">
+
+                                {{form.name}}
+
+                                <div class="your-comment-wrap">
+                                    <h6 class="your-rating-notify">Comment</h6>
+                                    {{form.message}}
+                                    
+                                    <h6 class="your-rating-notify">at least 140 characters</h6>
+                                </div>
+
+                                <div class="row">
+                                    
+                                    <div class="col-md-4">
+                                        <div class="your-rating-btn">
+                                            <button  class="btn btn-danger btn-block">Publish Review</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+
+
+
+
+
+
+
+
+
+                    <div class="booking-checkbox_wrap my-4">
+                        {% if comments %}
+                        <h4>{{comments.count}} Comments</h4>
+                        {% else %}
+                        <h4>No comment Yet</h4>
+                        {% endif %}
+
+                        <hr>
+                        {% for comment in comments %}
+                                                <div class="customer-review_wrap">
+                            <div class="customer-img">
+<img src="{% static 'LocalLibary/images/avatar.jpg' %}" class="img-fluid" alt="#">
+                                <p>{{comment.name}}</p>
+                                <span>#{{ forloop.counter }}</span>
+                                <hr>
+                            </div>
+                            <div class="customer-content-wrap">
+                                <div class="customer-content">
+                                    <div class="customer-review">
+                                        <h5>{{comment.name}}</h5>
+                                     
+                                    </div>
+                                    <div class="customer-rating">{{comment.created_at}}</div>
+                                </div>
+                                <p class="customer-text">{{comment.message}} </p>
+                            
+                               
+                            
+                            </div>
+                        
+                        </div>
+                                  {% endfor %}
+                        <hr>
+                        </div>
+
+            </div>
+
+                <div class="col-md-4 responsive-wrap">
+                    
+                    <div class="follow">
+                        <div class="follow-img">
+                            <img class="card-img-top" src="{{book.author.author_image.url}}" width="300" height="300" alt="{{book.author.first_name}} {{book.author.last_name}}">
+                            <h5 class="card-title"><a href="{{book.author.get_absolute_url}}">{{book.author}}</a>
+                            <span>{{book.author.about}}</span>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--//END BOOKING DETAILS -->
+    {%endblock  %}
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+            loop: true,
+            loopFillGroupWithBlank: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+    <script>
+        if ($('.image-link').length) {
+            $('.image-link').magnificPopup({
+                type: 'image',
+                gallery: {
+                    enabled: true
+                }
+            });
+        }
+        if ($('.image-link2').length) {
+            $('.image-link2').magnificPopup({
+                type: 'image',
+                gallery: {
+                    enabled: true
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

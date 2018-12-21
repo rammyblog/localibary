@@ -1,0 +1,21 @@
+{% extends 'LocalLibary/base.html' %}
+   {% block title%}404 Error - Bookie{% endblock %}
+{% block contents %}
+    <!--============================= 404 =============================-->
+    <section class="main-block d-flex align-items-center error-404">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="error-page">
+                        <h2>404</h2>
+                        <p>The page you are looking for doesn't exist</p>
+                        <a href="{% url 'index' %}" class="btn btn-outline-danger btn-confirmation">GO TO HOME PAGE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--//END 404 -->
+    {% endblock %}
+    <!--============================= FOOTER =============================-->
+   

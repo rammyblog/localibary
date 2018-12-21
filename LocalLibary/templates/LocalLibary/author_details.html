@@ -1,0 +1,194 @@
+{% extends 'LocalLibary/base.html'%}
+{% load static %}
+    <!--//END HEADER -->
+    {% block title%}{{author.first_name}} {{author.last_name}} Details - Bookie{% endblock %}
+    <!--============================= BOOKING =============================-->
+    {% block contents %}
+    <!--============================= RESERVE A SEAT =============================-->
+    <section class="reserve-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>{{author.first_name}} {{author.last_name}}</h5>
+                    <p><span></span><i class="fa-fa-mark"></i></p>
+                    <p><strong>Date Of Birth:</strong> {{author.date_of_birth}} {%if author.date_of_death != None%} {{author.date_of_death}} {% endif %}</p>
+                    <p class="text-muted"><strong>Books Published:</strong> {{author.book_set.all.count}}</p>
+                    <p class="reserve-description"></p>
+                </div>
+                <div class="col-md-6">
+                    <div class="reserve-seat-block">
+                        
+                        <div class="reserve-btn">
+                            <div class="featured-btn-wrap">
+                                <a href="mailto:onasanytunde67@gmail.com" class="btn btn-danger">Contact</a>
+                                 {% if perms.LocalLibary.can_mark_returned %}
+                            <a href="{% url 'author_update' author.id%}" class="btn btn-danger">Edit Author Details</a>
+                            <a href="{% url 'author_delete' author.id%}" class="btn btn-danger">Delete Author </a>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--//END RESERVE A SEAT -->
+    <!--============================= BOOKING DETAILS =============================-->
+    <section class="gray-dark booking-details_wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 responsive-wrap">
+                    <div class="booking-checkbox_wrap">
+                        <div class="booking-checkbox">
+                            <h1><p>List Of Books</p></h1>
+                            <hr>
+                        </div>
+                        <div class="row">
+                            {% for copy in author.book_set.all %}
+
+                            <div class="col-md-4">
+                                <img class="card-img-top" src="{{copy.book_image.url}}" width="250" height="250" alt="{{author.first_name}} {{author.last_name}}">
+                                <a href="{{copy.get_absolute_url}}">{{ copy.title }}</a>
+                             <p class="text-muted"><strong>Summary:</strong> {{copy.summary}}</p>
+                                <p class="text-danger"><strong>ISBN:</strong> {{copy.isbn}}</p>
+                                <label class="custom-checkbox">
+                        {% for genre in copy.genre.all%} <span class="ti-check-box"></span>
+                        <span class="custom-control-description">{{genre}} {% if not forloop.last%},{%endif%} </span>{% endfor %} 
+                      </label>
+                            
+                            </div>
+                            {% endfor %} 
+                                        
+                        </div>
+
+                    </div>                
+
+                    <div class="booking-checkbox_wrap booking-your-review">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                        <h5>Write a Review</h5>
+                        <hr>
+                        <div class="customer-review_wrap">
+                            <div class="customer-content-wrap">
+
+                                {{form.name}}
+
+                                <div class="your-comment-wrap">
+                                    <h6 class="your-rating-notify">Comment</h6>
+                                    {{form.message}}
+                                    
+                                    <h6 class="your-rating-notify">at least 140 characters</h6>
+                                </div>
+
+                                <div class="row">
+                                    
+                                    <div class="col-md-4">
+                                        <div class="your-rating-btn">
+                                            <button  class="btn btn-danger btn-block">Publish Review</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+
+
+
+
+
+
+
+
+
+                    <div class="booking-checkbox_wrap my-4">
+                        {% if comments %}
+                        <h4>{{comments.count}} Comments</h4>
+                        {% else %}
+                        <h4>No comment Yet</h4>
+                        {% endif %}
+
+                        <hr>
+                        {% for comment in comments %}
+                                                <div class="customer-review_wrap">
+                            <div class="customer-img">
+<img src="{% static 'LocalLibary/images/avatar.jpg' %}" class="img-fluid" alt="#">
+                                <p>{{comment.name}}</p>
+                                <span>#{{ forloop.counter }}</span>
+                                <hr>
+                            </div>
+                            <div class="customer-content-wrap">
+                                <div class="customer-content">
+                                    <div class="customer-review">
+                                        <h5>{{comment.name}}</h5>
+                                     
+                                    </div>
+                                    <div class="customer-rating">{{comment.created_at}}</div>
+                                </div>
+                                <p class="customer-text">{{comment.message}} </p>
+                            
+                               
+                            
+                            </div>
+                        
+                        </div>
+                                  {% endfor %}
+                        <hr>
+                        </div>
+
+            </div>
+
+                <div class="col-md-4 responsive-wrap">
+                    
+                    <div class="follow">
+                        <div class="follow-img">
+                           <img class="card-img-top" src="{{author.author_image.url}}" width="250" height="250" alt="{{author.first_name}} {{author.last_name}}">
+                            <h6>{{author.about}}</h6>
+                            <span></span>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--//END BOOKING DETAILS -->
+    {%endblock  %}
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+            loop: true,
+            loopFillGroupWithBlank: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+    <script>
+        if ($('.image-link').length) {
+            $('.image-link').magnificPopup({
+                type: 'image',
+                gallery: {
+                    enabled: true
+                }
+            });
+        }
+        if ($('.image-link2').length) {
+            $('.image-link2').magnificPopup({
+                type: 'image',
+                gallery: {
+                    enabled: true
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

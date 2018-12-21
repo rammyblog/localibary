@@ -1,0 +1,24 @@
+{% extends 'LocalLibary/base.html'%}
+{% block title%}Renew a Book - Bookie{% endblock %}
+{% block contents %}
+    <!--============================= SUBPAGE HEADER BG =============================-->
+<form method="post" action="" >
+{%csrf_token%}
+
+
+
+<div class="row">
+     <div class="col-md-6">
+            <div class="form-group">
+                <h5 class="text-success">SET A RENEWAL DATE</h5>
+                {{form.renewal_date}}
+                    </div>
+                    </div>
+                                
+                    </div>
+                    
+
+    <button type="submit" class="btn btn-simple">Submit</button>
+</form>
+        {% endblock %}
+    <!--//END ADD LISTING -->

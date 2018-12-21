@@ -1,0 +1,57 @@
+{% extends 'LocalLibary/base.html'%}
+{% block title%}Borrowed Book List For Libarian - Bookie{% endblock %}
+{% block contents %}
+    <!--============================= MAIN TITLE =============================-->
+
+ 
+    <!--//END POPULAR -->
+    <!--============================= FEATURED LISTING =============================-->
+    <section class="main-block featured-wrap">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="titile-block">
+                        {% if perms.LocalLibary.can_mark_returned %}
+                        <h2>Books</h2>
+                        <p>These Are all the Book Currently On Loan</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for book in borrowed %}  
+                <div class="col-md-4 card-1">
+                    <div class="card">  
+                        <img class="card-img-top" src="{{book.book.book_image.url}}" width="250" height="250" alt="{{book.book.title}}">
+                        <div class="card-body">
+                            <a href="{{book.book.get_absolute_url}}"><h5 class="card-title">{{book.book.title }}</h5></a>
+                            <ul class="card-rating">
+                            
+                                <li>Due Back:</li> {% if book.is_overdue %}<p class="text-danger">{{book.due_back}}  <a href="{%url 'renewalform' book.id %}">Renew</a>
+                                <li>{%else%}<p class="text-success">{{book.due_back}}</p>{%endif%}</li>
+                                  </ul>
+                            <p class="card-text">Summary: {{book.book.summary}}</p>
+                            <p class="text-danger">Unique ID: {{book.id}}</p>
+                            <p class="text-muted">ISBN: {{book.book.isbn}}</p>
+                            <p class="text-success">Imprint: {{book.imprint}}</p>
+                        </div>
+                        <div class="card-bottom">
+                            <a href="{{book.book.author.get_absolute_url}}"><p><i class="fa fa-male" aria-hidden="true"></i>{{book.book.author}}</p></a>
+                            
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+            </div>
+        {%else%}
+        <h1>You do not have access to view this page. If you have an account that has permission <a href="{% url 'login' %}?next{{request.path}}">LOGIN HERE</a></h1>
+{%endif%}
+        </div>
+   
+            </section>
+    <!--//END FEATURED LISTING -->
+    <!--============================= DETAILED ITEM  =============================-->
+   
+    {% endblock %}
+    <!--//END ADD LISTING -->
+    <!--============================= FOOTER =============================-->
+    

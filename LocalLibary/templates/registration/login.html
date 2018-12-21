@@ -1,0 +1,29 @@
+{% extends 'LocalLibary/base.html' %}
+{% block title %} Log in to Bookie{% endblock %}
+{% block contents %}
+
+  <div class="row justify-content-center">
+    <div class="col-lg-4 col-md-6 col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Log in</h3>
+          <form method="post" novalidate>
+
+            {% csrf_token %}
+             <input type="hidden" name="next" value="{{ next }}">
+            {% include 'registration/forms.html' %}
+            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+          </form>
+        </div>
+        <div class="card-footer text-muted text-center">
+          New to Bookie? <a href="{%url 'register' %}">Sign up</a>
+        </div>
+      </div>
+      <div class="text-center py-2">
+        <strong>
+          <a href="{%url 'password_reset'%}" class="text-muted">Forgot your password?</a>
+        </strong>
+      </div>
+    </div>
+  </div>
+{% endblock %}

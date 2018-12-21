@@ -1,0 +1,36 @@
+{% extends 'LocalLibary/base.html' %}
+
+{% block title%}Add A New Book - Bookie{% endblock %}
+{% block contents %}
+
+  <div class="row justify-content-center">
+    <div class="col-lg-4 col-md-6 col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title"> 
+              {% if book %}
+
+          Update {{book.title}} Details
+
+           {% elif author %}
+
+           Update {{ author.first_name}} {{ author.last_name}} Details
+
+           {% else %}
+Add A New Book/Author
+
+{%endif%}
+        </h3>
+          <form method="post" novalidate>
+
+            {% csrf_token %}
+            {% include 'registration/forms.html' %}
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+          </form>
+        </div>
+       
+      </div>
+     
+    </div>
+  </div>
+{% endblock %}
